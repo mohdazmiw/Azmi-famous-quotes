@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuoteVault — 100 Famous & Timeless Quotes</title>
+  <meta name="description" content="Discover, search, and filter 100 of the world's most famous quotes by philosopher, scientist, author, and category.">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="app-header">
+    <div class="container header-container">
+      <div class="logo">
+        <span class="logo-icon">❝</span>
+        <span class="logo-text">Quote<strong>Vault</strong></span>
+      </div>
+      <p class="tagline">100 Timeless Reflections from History's Greatest Minds</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Random Quote Card -->
+    <section class="hero-section">
+      <div class="quote-card hero-card" id="hero-quote-card">
+        <div class="card-top-meta">
+          <span class="category-badge" id="hero-category">Philosophy</span>
+          <span class="quote-id-badge" id="hero-quote-id">Quote #1</span>
+        </div>
+        
+        <blockquote class="quote-text" id="hero-quote-text">
+          Loading a timeless quote...
+        </blockquote>
+        
+        <cite class="quote-author" id="hero-quote-author">
+          — Socrates
+        </cite>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary" id="btn-next-quote" title="Get another random quote">
+            <span class="btn-icon">🎲</span> Next Random Quote
+          </button>
+          <button class="btn btn-secondary" id="btn-copy-quote" title="Copy quote to clipboard">
+            <span class="btn-icon">📋</span> Copy
+          </button>
+          <a class="btn btn-secondary" id="btn-share-quote" target="_blank" rel="noopener noreferrer" title="Share on X / Twitter">
+            <span class="btn-icon">𝕏</span> Share
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search & Filter Controls -->
+    <section class="controls-section">
+      <div class="controls-header">
+        <h2>Explore & Search Quotes</h2>
+        <span class="quotes-count-label" id="results-count">100 quotes available</span>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="category-filter-wrapper">
+        <label class="filter-label">Filter by Category:</label>
+        <div class="category-pills" id="category-pills">
+          <button class="pill active" data-category="all">All <span class="pill-count">100</span></button>
+          <!-- Dynamic category pills will be populated here -->
+        </div>
+      </div>
+
+      <!-- Search Input Controls -->
+      <div class="search-inputs-grid">
+        <div class="search-field">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="author-search" 
+            placeholder="Search by author (e.g. Einstein, Gandhi, Twain)..." 
+            autocomplete="off"
+            list="authors-datalist"
+          >
+          <datalist id="authors-datalist"></datalist>
+          <button class="clear-btn" id="clear-author" title="Clear author search" style="display: none;">&times;</button>
+        </div>
+
+        <div class="search-field">
+          <span class="search-icon">💬</span>
+          <input 
+            type="text" 
+            id="keyword-search" 
+            placeholder="Search by keyword in quote..." 
+            autocomplete="off"
+          >
+          <button class="clear-btn" id="clear-keyword" title="Clear keyword search" style="display: none;">&times;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quotes Results Grid -->
+    <section class="results-section">
+      <div class="grid-header">
+        <h3 id="grid-title">All Quotes</h3>
+        <button class="btn-text" id="reset-filters-btn" style="display: none;">Reset all filters</button>
+      </div>
+
+      <div class="quotes-grid" id="quotes-grid">
+        <!-- Rendered dynamically by Vanilla JS -->
+      </div>
+
+      <div class="empty-state" id="empty-state" style="display: none;">
+        <span class="empty-icon">🔎</span>
+        <h3>No matching quotes found</h3>
+        <p>Try searching for a different author, keyword, or select "All" categories.</p>
+        <button class="btn btn-secondary" id="empty-reset-btn">Reset Filters</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="container footer-content">
+      <p>Built with <strong>Python Flask</strong>, <strong>Vanilla JavaScript</strong>, and <strong>HTML5/CSS</strong></p>
+      <p class="copyright">QuoteVault &copy; 2026</p>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="alert" aria-live="polite">
+    <span class="toast-icon">✓</span>
+    <span class="toast-message" id="toast-message">Quote copied to clipboard!</span>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
