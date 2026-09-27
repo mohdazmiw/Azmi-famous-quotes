@@ -41,6 +41,7 @@
   const emptyResetBtn = document.getElementById('empty-reset-btn');
   const toast = document.getElementById('toast');
   const toastMessage = document.getElementById('toast-message');
+  const themeToggleBtn = document.getElementById('theme-toggle');
 
   let toastTimeout = null;
   let debounceTimeout = null;
@@ -49,6 +50,7 @@
   // Initialization
   // ==========================================
   async function init() {
+    initTheme();
     setupEventListeners();
     await Promise.all([
       loadCategories(),
@@ -58,10 +60,36 @@
     ]);
   }
 
+  function initTheme() {
+    const savedTheme = localStorage.getItem('quotevault-theme');
+    if (savedTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  }
+
+  function toggleTheme() {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('quotevault-theme', 'dark');
+      showToast('Switched to Dark mode');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('quotevault-theme', 'light');
+      showToast('Switched to Light mode');
+    }
+  }
+
   // ==========================================
   // Event Listeners
   // ==========================================
   function setupEventListeners() {
+    // Theme Switch
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', toggleTheme);
+    }
     // Next Random Quote
     btnNextQuote.addEventListener('click', () => {
       fetchRandomQuote();

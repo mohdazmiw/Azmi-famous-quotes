@@ -9,16 +9,34 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <script>
+    (function() {
+      if (localStorage.getItem('quotevault-theme') === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
 </head>
 <body>
   <!-- Header / Navigation -->
   <header class="app-header">
     <div class="container header-container">
-      <div class="logo">
-        <span class="logo-icon">❝</span>
-        <span class="logo-text">Quote<strong>Vault</strong></span>
+      <div class="header-main">
+        <div class="logo">
+          <span class="logo-icon">❝</span>
+          <span class="logo-text">Quote<strong>Vault</strong></span>
+        </div>
+        <p class="tagline">100 Timeless Reflections from History's Greatest Minds</p>
       </div>
-      <p class="tagline">100 Timeless Reflections from History's Greatest Minds</p>
+      <div class="theme-switch-wrapper">
+        <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle dark and light mode" title="Toggle color scheme">
+          <span class="theme-icon theme-icon-moon">🌙</span>
+          <span class="theme-toggle-track">
+            <span class="theme-toggle-thumb"></span>
+          </span>
+          <span class="theme-icon theme-icon-sun">☀️</span>
+        </button>
+      </div>
     </div>
   </header>
 
