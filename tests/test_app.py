@@ -120,5 +120,29 @@ class TestQuoteApp(unittest.TestCase):
         # Check sorted
         self.assertEqual(data['authors'], sorted(data['authors']))
 
+    def test_export_csv_default(self):
+        """Test GET /api/export/csv returns valid CSV of all 100 quotes."""
+        response = self.app.get('/api/export/csv')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('text/csv', response.content_type)
+        self.assertIn('attachment; filename=quotes.csv', response.headers.get('Content-Disposition', ''))
+        
+        lines = response.data.decode('utf-8').strip().split('\r\n')
+        if len(lines) <= 1:
+            lines = response.data.decode('utf-8').strip().split('\n')
+        self.assertEqual(len(lines), 101)  # 1 header + 100 quotes
+        self.assertIn('ID,Quote,Author,Category', lines[0])
+
+    def test_export_csv_filtered(self):
+        """Test GET /api/export/csv?category=Science returns only science quotes in CSV."""
+        response = self.app.get('/api/export/csv?category=Science')
+        self.assertEqual(response.status_code, 200)
+        lines = response.data.decode('utf-8').strip().split('\r\n')
+        if len(lines) <= 1:
+            lines = response.data.decode('utf-8').strip().split('\n')
+        self.assertGreater(len(lines), 1)
+        for line in lines[1:]:
+            self.assertIn('Science', line)
+
 if __name__ == '__main__':
     unittest.main()

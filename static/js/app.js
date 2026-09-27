@@ -24,6 +24,7 @@
   const btnNextQuote = document.getElementById('btn-next-quote');
   const btnCopyQuote = document.getElementById('btn-copy-quote');
   const btnShareQuote = document.getElementById('btn-share-quote');
+  const btnExportCsv = document.getElementById('btn-export-csv');
 
   const categoryPillsContainer = document.getElementById('category-pills');
   const authorInput = document.getElementById('author-search');
@@ -69,9 +70,27 @@
     // Copy Hero Quote
     btnCopyQuote.addEventListener('click', () => {
       if (state.currentHeroQuote) {
-        copyQuoteToClipboard(state.currentHeroQuote);
+        copyQuoteToClipboard(state.currentHeroQuote, btnCopyQuote);
       }
     });
+
+    // Export to CSV
+    if (btnExportCsv) {
+      btnExportCsv.addEventListener('click', () => {
+        const params = new URLSearchParams();
+        if (state.activeCategory && state.activeCategory !== 'all') {
+          params.append('category', state.activeCategory);
+        }
+        if (state.authorQuery) {
+          params.append('author', state.authorQuery);
+        }
+        if (state.keywordQuery) {
+          params.append('q', state.keywordQuery);
+        }
+        window.location.href = `/api/export/csv?${params.toString()}`;
+        showToast('Exporting quotes to CSV...');
+      });
+    }
 
     // Author Search Input with Debounce
     authorInput.addEventListener('input', (e) => {
@@ -319,7 +338,7 @@
         const id = parseInt(btn.getAttribute('data-id'), 10);
         const selected = quotes.find(q => q.id === id);
         if (selected) {
-          copyQuoteToClipboard(selected);
+          copyQuoteToClipboard(selected, btn);
         }
       });
     });
@@ -353,18 +372,31 @@
   // Utilities
   // ==========================================
 
-  function copyQuoteToClipboard(quote) {
+  function copyQuoteToClipboard(quote, btnEl) {
     const textToCopy = `"${quote.quote}" — ${quote.author}`;
+    const handleSuccess = () => {
+      showToast('Quote copied to clipboard!');
+      if (btnEl) {
+        const originalHtml = btnEl.innerHTML;
+        btnEl.innerHTML = '✓ Copied!';
+        btnEl.classList.add('copied');
+        setTimeout(() => {
+          btnEl.innerHTML = originalHtml;
+          btnEl.classList.remove('copied');
+        }, 1800);
+      }
+    };
+
     if (navigator.clipboard && window.isSecureContext) {
       navigator.clipboard.writeText(textToCopy)
-        .then(() => showToast('Quote copied to clipboard!'))
-        .catch(() => fallbackCopy(textToCopy));
+        .then(handleSuccess)
+        .catch(() => fallbackCopy(textToCopy, btnEl));
     } else {
-      fallbackCopy(textToCopy);
+      fallbackCopy(textToCopy, btnEl);
     }
   }
 
-  function fallbackCopy(text) {
+  function fallbackCopy(text, btnEl) {
     const textArea = document.createElement('textarea');
     textArea.value = text;
     textArea.style.position = 'fixed';
@@ -375,6 +407,15 @@
     try {
       document.execCommand('copy');
       showToast('Quote copied to clipboard!');
+      if (btnEl) {
+        const originalHtml = btnEl.innerHTML;
+        btnEl.innerHTML = '✓ Copied!';
+        btnEl.classList.add('copied');
+        setTimeout(() => {
+          btnEl.innerHTML = originalHtml;
+          btnEl.classList.remove('copied');
+        }, 1800);
+      }
     } catch (err) {
       showToast('Failed to copy quote');
     }
